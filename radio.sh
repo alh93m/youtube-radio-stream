@@ -3,9 +3,10 @@
 while true
 do
   ffmpeg -re \
-  -loop 1 -framerate 1 -i bg.png \
+  -loop 1 -framerate 1 -i bg.jpeg \
   -i "$RADIO_URL" \
   -map 0:v:0 -map 1:a:0 \
+  -vf "scale=4800:2700" \
   -c:v libx264 -preset veryfast -tune stillimage \
   -c:a aac -b:a 128k \
   -pix_fmt yuv420p \
