@@ -1,23 +1,33 @@
-name: YouTube Radio Stream
+name: Quran YT Radio Stream
 
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 */6 * * *"   # يعيد التشغيل كل 6 ساعات
+    - cron: "0 */5 * * *"
 
 jobs:
   stream:
     runs-on: ubuntu-latest
+    timeout-minutes: 350
 
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-    - name: Install FFmpeg
-      run: sudo apt-get update && sudo apt-get install ffmpeg -y
+      - name: Install FFmpeg
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
 
-    - name: Run Stream
-      env:
-        RADIO_URL: ${{ secrets.RADIO_URL }}
-        YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
-      run: bash radio.sh
+      - name: Verify Files
+        run: |
+          ls -lah
+          ffmpeg -version
+
+      - name: Start Radio Stream
+        env:
+          RADIO_URL: ${{ secrets.RADIO_URL }}
+          YOUTUBE_URL: ${{ secrets.YOUTUBE_URL }}
+        run: |
+          chmod +x radio.sh
+          ./radio.sh
